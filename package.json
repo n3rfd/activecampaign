@@ -1,0 +1,28 @@
+{
+  "name": "activecampaign-rest",
+  "version": "0.0.1",
+  "description": "ActiveCampaign REST Nodejs SDK",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/mock"
+  },
+  "author": {
+    "name": "Neftali Papelleras <iam@neftalipapelleras.com>",
+    "homepage": "https://neftalipapelleras.com"
+  },
+  "license": "MIT License",
+  "homepage": "https://github.com/android86/activecampaign",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/android86/activecampaign"
+  },
+  "keywords": [
+    "activecampaign",
+    "v3"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "^5.2.0",
+    "chai": "^4.1.2"
+  }
+}
