@@ -2,12 +2,8 @@ language: node_js
 node_js:
   - '10'
   - '8'
-install:
-  - npm install -g codecov
-  - npm install -g nyc
 script:
   - npm test
-  - codecov
 branches:
   only:
     - master
