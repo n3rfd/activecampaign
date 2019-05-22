@@ -4,7 +4,8 @@
   "description": "ActiveCampaign REST Nodejs SDK",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha test/mock"
+    "test": "nyc mocha test/mock",
+    "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
   "author": {
     "name": "Neftali Papelleras <iam@neftalipapelleras.com>",
