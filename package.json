@@ -30,7 +30,8 @@
   },
   "nyc": {
     "exclude": [
-      "lib/http.js"
+      "lib/http.js",
+      "test/**"
     ]
   }
 }
