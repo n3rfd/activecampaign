@@ -6,6 +6,43 @@ let expect = chai.expect
 let assert = chai.assert
 
 describe('Contact Entity', function () {
+  it('should validate required field - email', function () {
+    const Contact = require('./../../lib/contact')
+
+    try {
+      let contactObj = new Contact({})
+      let contactStr = JSON.stringify(contactObj)
+
+      assert.fail('This call should throw an exception.')
+    } catch (err) {
+      expect(err.message).equal('Empty field: email')
+    }
+  })
+
+  it('should allow required field - email', function () {
+    const Contact = require('./../../lib/contact')
+
+    try {
+      let email = 'james@constant.com'
+
+      let contactObj = new Contact({
+        'email': email
+      })
+
+      let contactStr = JSON.stringify(contactObj)
+
+      let contactJSON = JSON.parse(contactStr)
+
+      contactJSON.contact.email.should.equal(email)
+
+      expect(contactJSON.contact.firstName).is.a('null')
+      expect(contactJSON.contact.lastName).is.a('null')
+      expect(contactJSON.contact.phone).is.a('null')
+    } catch (err) {
+      assert.fail('This call should throw an exception.')
+    }
+  })
+
   it('should create a new instance of Contact class', function () {
     const Contact = require('./../../lib/contact')
 
@@ -43,7 +80,6 @@ describe('ActiveCampaign.Contact::sync()', function () {
     }
 
     const AC = require('./../../index')
-    const Contact = require('./../../lib/contact')
 
     let contact = new AC.Contact({
       'url': process.env.APIURL,
@@ -56,14 +92,14 @@ describe('ActiveCampaign.Contact::sync()', function () {
     let lastName = 'constant'
     let phone = '123-123-1234'
 
-    let contactRawJSON = {
+    let payload = {
       'email': email,
       'firstName': firstName,
       'lastName': lastName,
       'phone': phone
     }
 
-    contact.sync(contactRawJSON, (err, res) => {
+    contact.sync(payload, (err, res) => {
       if (err) {}
 
       expect(res.contact).to.have.a.property('email').equal(email)
@@ -72,6 +108,112 @@ describe('ActiveCampaign.Contact::sync()', function () {
       expect(res.contact).to.have.a.property('phone').equal(phone)
 
       done()
+    })
+  })
+
+  it('should handle empty/error response from the Contact Sync method', function (done) {
+    class MockHttp {
+      static post (params, callback) {
+        let jsonMockResponse = {headers: {}, body: ''}
+
+        callback(jsonMockResponse)
+      }
+    }
+
+    const AC = require('./../../index')
+
+    let contact = new AC.Contact({
+      'url': process.env.APIURL,
+      'token': process.env.APIKEY,
+      'http': MockHttp
+    })
+
+    let email = 'james@constant.com'
+    let firstName = 'james'
+    let lastName = 'constant'
+    let phone = '123-123-1234'
+
+    let payload = {
+      'email': email,
+      'firstName': firstName,
+      'lastName': lastName,
+      'phone': phone
+    }
+
+    contact.sync(payload, (err, res) => {
+      if (err) {
+        done()
+      }
+
+      assert.fail('This call should throw an exception.')
+    })
+  })
+})
+
+describe('ActiveCampaign.Contact::delete()', function () {
+  it('should delete an existing contact in AC', function (done) {
+    class MockHttp {
+      static delete (params, callback) {
+        let jsonMockResponse = {headers: {}, body: ''}
+
+        callback(jsonMockResponse)
+      }
+    }
+
+    const AC = require('./../../index')
+
+    let contact = new AC.Contact({
+      'url': process.env.APIURL,
+      'token': process.env.APIKEY,
+      'http': MockHttp
+    })
+
+    let email = 'james@constant.com'
+
+    let payload = {
+      'email': email,
+      'id': 1
+    }
+
+    contact.delete(payload, (err, res) => {
+      if (err) {
+        assert.fail('This call should throw an exception.')
+      }
+
+      done()
+    })
+  })
+
+  it('should handle error response from the Contact Delete method', function (done) {
+    class MockHttp {
+      static delete (params, callback) {
+        let jsonMockResponse = {headers: {}, body: '{"error": "ERROR MESSAGE"}'}
+
+        callback(jsonMockResponse)
+      }
+    }
+
+    const AC = require('./../../index')
+
+    let contact = new AC.Contact({
+      'url': process.env.APIURL,
+      'token': process.env.APIKEY,
+      'http': MockHttp
+    })
+
+    let email = 'james@constant.com'
+
+    let payload = {
+      'email': email,
+      'id': 1
+    }
+
+    contact.delete(payload, (err, res) => {
+      if (err) {
+        done()
+      }
+
+      assert.fail('This call should throw an exception.')
     })
   })
 })

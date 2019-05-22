@@ -46,14 +46,14 @@ describe('ActiveCampaign.Contact::sync()', function () {
     let lastName = 'constant'
     let phone = '123-123-1234'
 
-    let contactRawJSON = {
+    let payload = {
       'email': email,
       'firstName': firstName,
       'lastName': lastName,
       'phone': phone
     }
 
-    contact.sync(contactRawJSON, (err, res) => {
+    contact.sync(payload, (err, res) => {
       if (err) {}
 
       expect(res.contact).to.have.a.property('email').equal(email)
@@ -61,9 +61,9 @@ describe('ActiveCampaign.Contact::sync()', function () {
       expect(res.contact).to.have.a.property('lastName').equal(lastName)
       expect(res.contact).to.have.a.property('phone').equal(phone)
 
-      contactRawJSON.id = res.contact.id
+      payload.id = res.contact.id
 
-      contact.delete(contactRawJSON, (err, res) => {
+      contact.delete(payload, (err, res) => {
         if (err) {}
 
         done()
