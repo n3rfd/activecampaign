@@ -6,7 +6,7 @@ let expect = chai.expect
 let assert = chai.assert
 
 describe('Contact Entity', function () {
-  it('should', function () {
+  it('should create a new instance of Contact class', function () {
     const Contact = require('./../../lib/contact')
 
     let email = 'james@constant.com'
@@ -42,7 +42,7 @@ describe('ActiveCampaign.Contact::sync()', function () {
       }
     }
 
-    const AC = require('./../../lib/activecampaign')
+    const AC = require('./../../index')
     const Contact = require('./../../lib/contact')
 
     let contact = new AC.Contact({
@@ -56,14 +56,14 @@ describe('ActiveCampaign.Contact::sync()', function () {
     let lastName = 'constant'
     let phone = '123-123-1234'
 
-    let contactObj = new Contact({
+    let contactRawJSON = {
       'email': email,
       'firstName': firstName,
       'lastName': lastName,
       'phone': phone
-    })
+    }
 
-    contact.sync(contactObj, (err, res) => {
+    contact.sync(contactRawJSON, (err, res) => {
       if (err) {}
 
       expect(res.contact).to.have.a.property('email').equal(email)

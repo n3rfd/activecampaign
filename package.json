@@ -4,7 +4,7 @@
   "description": "ActiveCampaign REST Nodejs SDK",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/mock"
+    "test": "nyc mocha test/mock"
   },
   "author": {
     "name": "Neftali Papelleras <iam@neftalipapelleras.com>",
@@ -20,7 +20,9 @@
     "activecampaign",
     "v3"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "nyc": "^14.1.1"
+  },
   "devDependencies": {
     "mocha": "^5.2.0",
     "chai": "^4.1.2"
