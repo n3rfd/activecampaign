@@ -73,7 +73,7 @@ describe('ActiveCampaign.Contact::sync()', function () {
   it('should create or sync a Contact in AC', function (done) {
     class MockHttp {
       static post (params, callback) {
-        let jsonMockResponse = {headers: {}, body: '{"contact": {"id": "1", "email": "james@constant.com", "firstName": "james", "lastName": "constant", "phone": "123-123-1234"}}'}
+        let jsonMockResponse = {headers: {}, body: {"contact": {"id": "1", "email": "james@constant.com", "firstName": "james", "lastName": "constant", "phone": "123-123-1234"}}}
 
         callback(jsonMockResponse)
       }
@@ -99,22 +99,25 @@ describe('ActiveCampaign.Contact::sync()', function () {
       'phone': phone
     }
 
-    contact.sync(payload, (err, res) => {
-      if (err) {}
-
-      expect(res.contact).to.have.a.property('email').equal(email)
-      expect(res.contact).to.have.a.property('firstName').equal(firstName)
-      expect(res.contact).to.have.a.property('lastName').equal(lastName)
-      expect(res.contact).to.have.a.property('phone').equal(phone)
+    contact.sync(payload, (err, contactObj) => {
+      if (err) {
+        assert.fail('This call should not return an error.')
+      } else {
+        expect(contactObj).to.have.a.property('id')
+        expect(contactObj).to.have.a.property('email').equal(email)
+        expect(contactObj).to.have.a.property('firstName').equal(firstName)
+        expect(contactObj).to.have.a.property('lastName').equal(lastName)
+        expect(contactObj).to.have.a.property('phone').equal(phone)
+      }
 
       done()
     })
   })
 
-  it('should handle empty/error response from the Contact Sync method', function (done) {
+  it('should handle error validation response - invalid email format error', function (done) {
     class MockHttp {
       static post (params, callback) {
-        let jsonMockResponse = {headers: {}, body: ''}
+        let jsonMockResponse = {headers: {}, body: {"errors": [{"title":"Contact Email Address is not valid.","detail":"","code":"email_invalid"}]}}
 
         callback(jsonMockResponse)
       }
@@ -142,10 +145,14 @@ describe('ActiveCampaign.Contact::sync()', function () {
 
     contact.sync(payload, (err, res) => {
       if (err) {
-        done()
-      }
+        expect(err.errors[0]).to.have.a.property('title').equal('Contact Email Address is not valid.')
+        expect(err.errors[0]).to.have.a.property('detail').equal('')
+        expect(err.errors[0]).to.have.a.property('code').equal('email_invalid')
 
-      assert.fail('This call should throw an exception.')
+        done()
+      } else {
+        assert.fail('This call should throw an exception.')
+      }
     })
   })
 })
@@ -184,10 +191,10 @@ describe('ActiveCampaign.Contact::delete()', function () {
     })
   })
 
-  it('should handle error response from the Contact Delete method', function (done) {
+  it('should handle error response - non-existing contact id', function (done) {
     class MockHttp {
       static delete (params, callback) {
-        let jsonMockResponse = {headers: {}, body: '{"error": "ERROR MESSAGE"}'}
+        let jsonMockResponse = {headers: {}, body: {"message": "No Result found for Subscriber with id 0"}}
 
         callback(jsonMockResponse)
       }
@@ -205,15 +212,17 @@ describe('ActiveCampaign.Contact::delete()', function () {
 
     let payload = {
       'email': email,
-      'id': 1
+      'id': 0
     }
 
     contact.delete(payload, (err, res) => {
       if (err) {
-        done()
+        expect(err).to.have.a.property('message').equal('No Result found for Subscriber with id 0')
+      } else {
+        assert.fail('This call should throw an exception.')
       }
 
-      assert.fail('This call should throw an exception.')
+      done()
     })
   })
 })
