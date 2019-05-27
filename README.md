@@ -6,7 +6,7 @@
 
 ## Examples
 
-### Basic Contact Sync
+### Basic Use Case - Contact.Sync()
 
 ``` js
 const AC = require('activecampaign-rest')
@@ -24,6 +24,40 @@ let payload = {
 }
 
 contact.sync(payload, (err, res) => {
+  if (err) {}
+
+  console.log(res)
+})
+```
+
+### Custom Fields Use Case - Contact.SyncFields()
+
+``` js
+const AC = require('activecampaign-rest')
+
+let contact = new AC.Contact({
+  'url': 'https://xxx.api-us1.com',
+  'token': 'API_TOKEN'
+})
+
+let payload = {
+  'email': 'john@wick.com',
+  'firstName': 'john',
+  'lastName': 'wick',
+  'phone': '032-123-1234',
+  'fieldValues': [
+    {
+      'fieldName': 'Company',
+      'value':'ABC'
+    },
+    {
+      'fieldName': 'License',
+      'value':'MIT'
+    },
+  ]
+}
+
+contact.syncFields(payload, (err, res) => {
   if (err) {}
 
   console.log(res)
