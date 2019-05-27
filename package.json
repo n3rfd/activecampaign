@@ -1,6 +1,6 @@
 {
   "name": "activecampaign-rest",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "ActiveCampaign REST Nodejs SDK",
   "main": "index.js",
   "scripts": {
