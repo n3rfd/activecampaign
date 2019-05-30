@@ -30,7 +30,7 @@ contact.sync(payload, (err, res) => {
 })
 ```
 
-### Custom Fields Use Case - Contact.SyncFields()
+### Custom Fields Use Case - Contact.Sync()
 
 ``` js
 const AC = require('activecampaign-rest')
@@ -45,13 +45,13 @@ let payload = {
   'firstName': 'john',
   'lastName': 'wick',
   'phone': '032-123-1234',
-  'fieldValues': [
+  'fields': [
     {
-      'fieldName': 'Company',
+      'name': 'Company',
       'value':'ABC'
     },
     {
-      'fieldName': 'License',
+      'name': 'License',
       'value':'MIT'
     },
   ]

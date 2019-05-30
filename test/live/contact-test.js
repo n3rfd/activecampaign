@@ -214,15 +214,15 @@ describe('ActiveCampaign.Contact::syncWithFields()', function () {
       'firstName': firstName,
       'lastName': lastName,
       'phone': phone,
-      'fieldValues': [
+      'fields': [
         {
-          'fieldName': 'Foo',
+          'name': 'Foo',
           'value':'Bourne'
         }
       ]
     }
 
-    contact.syncFields(payload, (err, res) => {
+    contact.sync(payload, (err, res) => {
       if (err) {
         assert.fail('This call should not return an error.')
       }
