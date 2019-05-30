@@ -57,7 +57,7 @@ let payload = {
   ]
 }
 
-contact.syncFields(payload, (err, res) => {
+contact.sync(payload, (err, res) => {
   if (err) {}
 
   console.log(res)
