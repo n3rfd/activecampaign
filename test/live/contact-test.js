@@ -221,7 +221,7 @@ describe('ActiveCampaign.Contact::syncWithFields()', function () {
         }
       ]
     }
-
+    
     contact.sync(payload, (err, res) => {
       if (err) {
         assert.fail('This call should not return an error.')
