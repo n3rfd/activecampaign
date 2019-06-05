@@ -7,7 +7,7 @@ let assert = chai.assert
 
 describe('Contact Entity', function () {
   it('should validate required field - email', function () {
-    const Contact = require('./../../lib/contact')
+    const Contact = require('./../lib/contact')
 
     try {
       let contactObj = new Contact({})
@@ -20,7 +20,7 @@ describe('Contact Entity', function () {
   })
 
   it('should allow required field - email', function () {
-    const Contact = require('./../../lib/contact')
+    const Contact = require('./../lib/contact')
 
     try {
       let email = 'james@constant.com'
@@ -44,7 +44,7 @@ describe('Contact Entity', function () {
   })
 
   it('should create a new instance of Contact class', function () {
-    const Contact = require('./../../lib/contact')
+    const Contact = require('./../lib/contact')
 
     let email = 'james@constant.com'
     let firstName = 'james'
@@ -67,11 +67,59 @@ describe('Contact Entity', function () {
     contactJSON.contact.lastName.should.equal(lastName)
     contactJSON.contact.phone.should.equal(phone)
   })
+
+  it('should handle non-array fields', function () {
+    const Contact = require('./../lib/contact')
+
+    let email = 'james@constant.com'
+    let firstName = 'james'
+    let lastName = 'constant'
+    let phone = '123-123-1234'
+
+    let contactObj = new Contact({
+      'email': email,
+      'firstName': firstName,
+      'lastName': lastName,
+      'phone': phone,
+      'fields': 'STR'
+    })
+
+    let contactStr = JSON.stringify(contactObj)
+
+    let contactJSON = JSON.parse(contactStr)
+
+    expect(contactJSON.contact).to.have.a.property('fields').equal(null)
+  })
+
+  it('should return an empty array when get->fields did not find a match', function () {
+    const Contact = require('./../lib/contact')
+
+    let email = 'james@constant.com'
+    let firstName = 'james'
+    let lastName = 'constant'
+    let phone = '123-123-1234'
+
+    let contactObj = new Contact({
+      'email': email,
+      'firstName': firstName,
+      'lastName': lastName,
+      'phone': phone,
+      'fields': []
+    })
+
+    contactObj.customFields = ['xxx']
+
+    let contactStr = JSON.stringify(contactObj)
+
+    let contactJSON = JSON.parse(contactStr)
+
+    expect(contactJSON.contact).to.have.a.property('fields').that.is.empty
+  })
 })
 
 describe('ActiveCampaign.Contact::sync()', function () {
   it('should create or sync a Contact in AC', function (done) {
-    const AC = require('./../../index')
+    const AC = require('./../index')
 
     let contact = new AC.Contact({
       'url': process.env.APIURL,
@@ -114,7 +162,7 @@ describe('ActiveCampaign.Contact::sync()', function () {
   }).timeout(10000)
 
   it('should handle error validation response - invalid email format error', function (done) {
-    const AC = require('./../../index')
+    const AC = require('./../index')
 
     let contact = new AC.Contact({
       'url': process.env.APIURL,
@@ -145,11 +193,58 @@ describe('ActiveCampaign.Contact::sync()', function () {
       }
     })
   }).timeout(10000)
+
+  it('should sync custom fields', function (done) {
+    const AC = require('./../index')
+
+    let contact = new AC.Contact({
+      'url': process.env.APIURL,
+      'token': process.env.APIKEY
+    })
+
+    let email = 'james@constant.com'
+    let firstName = 'james'
+    let lastName = 'constant'
+    let phone = '123-123-1234'
+
+    let payload = {
+      'email': email,
+      'firstName': firstName,
+      'lastName': lastName,
+      'phone': phone,
+      'fields': [
+        {
+          'name': 'Foo',
+          'value':'Bourne'
+        },
+        {
+          'name': 'Country',
+          'value':'Phils'
+        }
+      ]
+    }
+
+    contact.sync(payload, (err, contactObj) => {
+      if (err) {
+        assert.fail('This call should not return an error.')
+      }
+
+      payload.id = contactObj.id
+
+      contact.delete(payload, (err, res) => {
+        if (err) {
+          assert.fail('This call should throw an exception.')
+        }
+
+        done()
+      })
+    })
+  }).timeout(10000)
 })
 
 describe('ActiveCampaign.Contact::delete()', function () {
   it('should handle error response - non-existing contact id', function (done) {
-    const AC = require('./../../index')
+    const AC = require('./../index')
 
     let contact = new AC.Contact({
       'url': process.env.APIURL,
@@ -171,73 +266,6 @@ describe('ActiveCampaign.Contact::delete()', function () {
       }
 
       done()
-    })
-  }).timeout(10000)
-})
-
-describe('ActiveCampaign.Contact::syncWithFields()', function () {
-  // it('should...', function (done) {
-  //   const AC = require('./../../index')
-  //
-  //   let field = new AC.Field({
-  //     'url': process.env.APIURL,
-  //     'token': process.env.APIKEY
-  //   })
-  //
-  //   let email = 'james@constant.com'
-  //
-  //   let payload = {}
-  //
-  //   field .list()
-  //         .then((data) => {
-  //           console.log(data)
-  //
-  //           done()
-  //         })
-  // }).timeout(10000)
-
-  it('should...', function (done) {
-    const AC = require('./../../index')
-
-    let contact = new AC.Contact({
-      'url': process.env.APIURL,
-      'token': process.env.APIKEY
-    })
-
-    let email = 'james@constant.com'
-    let firstName = 'james'
-    let lastName = 'constant'
-    let phone = '123-123-1234'
-
-    let payload = {
-      'email': email,
-      'firstName': firstName,
-      'lastName': lastName,
-      'phone': phone,
-      'fields': [
-        {
-          'name': 'Foo',
-          'value':'Bourne'
-        }
-      ]
-    }
-    
-    contact.sync(payload, (err, res) => {
-      if (err) {
-        assert.fail('This call should not return an error.')
-      }
-
-      done()
-
-      // payload.id = res.contact.id
-      //
-      // contact.delete(payload, (err, res) => {
-      //   if (err) {
-      //     assert.fail('This call should throw an exception.')
-      //   }
-      //
-      //   done()
-      // })
     })
   }).timeout(10000)
 })

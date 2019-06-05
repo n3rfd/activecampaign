@@ -7,7 +7,7 @@ let assert = chai.assert
 
 describe('ActiveCampaign::constructor()', function () {
   it('should throw exception - missing url field', function () {
-    const AC = require('./../../index')
+    const AC = require('./../index')
 
     try {
       let contact = new AC.Contact({})
@@ -19,7 +19,7 @@ describe('ActiveCampaign::constructor()', function () {
   })
 
   it('should throw exception - missing token field', function () {
-    const AC = require('./../../index')
+    const AC = require('./../index')
 
     try {
       let contact = new AC.Contact({
@@ -35,7 +35,7 @@ describe('ActiveCampaign::constructor()', function () {
   it('should accept url, token, and http parameters', function () {
     class MockHttp {}
 
-    const AC = require('./../../index')
+    const AC = require('./../index')
 
     try {
       let url = 'https://xxx.api-us1.com'
