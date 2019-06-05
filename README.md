@@ -4,7 +4,14 @@
 [![codecov](https://codecov.io/gh/android86/activecampaign/branch/master/graph/badge.svg)](https://codecov.io/gh/android86/activecampaign)
 [![Maintainability](https://api.codeclimate.com/v1/badges/3021111943dd84108367/maintainability)](https://codeclimate.com/github/android86/activecampaign/maintainability)
 
-## Examples
+## Install
+
+```bash
+# with npm
+npm install activecampaign-rest
+```
+
+## Usage
 
 ### Basic Use Case - Contact.Sync()
 
