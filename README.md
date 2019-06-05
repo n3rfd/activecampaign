@@ -1,4 +1,4 @@
-# ActiveCampaign v3 API Node.js Client
+# Node.js Client for ActiveCampaign's v3 - REST API
 
 [![Build Status](https://travis-ci.com/android86/activecampaign.svg?branch=master)](https://travis-ci.com/android86/activecampaign)
 [![codecov](https://codecov.io/gh/android86/activecampaign/branch/master/graph/badge.svg)](https://codecov.io/gh/android86/activecampaign)
@@ -6,9 +6,10 @@
 
 ## Install
 
+This library is distributed on npm. To add it as a dependency, run the following command:
+
 ```bash
-# with npm
-npm install activecampaign-rest
+$ npm install activecampaign-rest
 ```
 
 ## Usage
