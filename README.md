@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.com/android86/activecampaign.svg?branch=master)](https://travis-ci.com/android86/activecampaign)
 [![codecov](https://codecov.io/gh/android86/activecampaign/branch/master/graph/badge.svg)](https://codecov.io/gh/android86/activecampaign)
+[![NPM version](https://img.shields.io/npm/v/dotenv.svg?style=flat-square)](https://www.npmjs.com/package/activecampaign-rest)
 [![Maintainability](https://api.codeclimate.com/v1/badges/3021111943dd84108367/maintainability)](https://codeclimate.com/github/android86/activecampaign/maintainability)
 
 ## Install
